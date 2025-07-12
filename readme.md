@@ -1,0 +1,26 @@
+# Sonte
+
+**Sonte** (*Stephen's Objective Note-Taking Engine.*) is a command-line note-taking application, written in [Go 1.24][go] by [Stephen Malone][sm].
+
+- See [`changes.md`][ch] for the full changelog.
+- See [`license.md`][li] for the open-source license (BSD-3).
+
+## Configuration
+
+> [!NOTE]
+> To do.
+
+## Commands
+
+> [!NOTE]
+> To do.
+
+## Contributions
+
+Please send all bug reports and feature requests to the [issue tracker][it], thank you.
+
+[ch]: https://github.com/gesedels/sonte/blob/main/changes.md
+[li]: https://github.com/gesedels/sonte/blob/main/license.md
+[go]: https://go.dev/doc/go1.24
+[it]: https://github.com/gesedels/sonte/issues
+[sm]: https://github.com/gesedels
