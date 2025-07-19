@@ -1,3 +1,7 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//                   sonte · stephen's obsessive note-taking engine                  //
+///////////////////////////////////////////////////////////////////////////////////////
+
 package main
 
 import (
@@ -10,39 +14,108 @@ import (
 	"time"
 )
 
-/// note type and funcs ///
+///////////////////////////////////////////////////////////////////////////////////////
+//                       part one · value conversion functions                       //
+///////////////////////////////////////////////////////////////////////////////////////
 
-type Note struct {
-	Time time.Time `json:"time"`
-	Body string    `json:"body"`
-}
+///////////////////////////////////////////////////////////////////////////////////////
+//                           part two · json file functions                          //
+///////////////////////////////////////////////////////////////////////////////////////
 
-func saveNote(dire string, note *Note) error {
-	base := fmt.Sprintf("%d.json", note.Time.Unix())
-	path := filepath.Join(dire, base)
-	bytes, err := json.MarshalIndent(note, "", "  ")
+// ReadJSON returns an unmarshalled JSON value from a file.
+func ReadJSON(orig string, jval any) error {
+	bytes, err := os.ReadFile(orig)
 	if err != nil {
 		return err
 	}
 
-	return os.WriteFile(path, bytes, 0666)
+	return json.Unmarshal(bytes, jval)
 }
 
-func loadNote(orig string) (*Note, error) {
-	bytes, err := os.ReadFile(orig)
+// WriteJSON writes a marshalled JSON value to a file.
+func WriteJSON(dest string, jval any) error {
+	bytes, err := json.Marshal(jval)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	note := new(Note)
-	if err := json.Unmarshal(bytes, note); err != nil {
-		return nil, err
-	}
-
-	return note, nil
+	return os.WriteFile(dest, bytes, 0666)
 }
 
-/// main funcs ///
+///////////////////////////////////////////////////////////////////////////////////////
+//                   part three · command-line interface functions                   //
+///////////////////////////////////////////////////////////////////////////////////////
+
+// EditFile opens a file in $EDITOR, returning after exit.
+func EditFile(orig string) error {
+	name, ok := os.LookupEnv("EDITOR")
+	if !ok {
+		return fmt.Errorf("environment variable $EDITOR not set")
+	}
+
+	path, err := exec.LookPath(name)
+	if err != nil {
+		return err
+	}
+
+	comm := exec.Command(path, orig)
+	comm.Stdin = os.Stdin
+	comm.Stdout = os.Stdout
+	comm.Stderr = os.Stderr
+	return comm.Run()
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//                            part four · type definitions                           //
+///////////////////////////////////////////////////////////////////////////////////////
+
+// Entry is a single JSON file containing a system entry.
+type Entry struct {
+	Time time.Time `json:"time"`
+	Body string    `json:"body"`
+}
+
+// NewEntry returns a new Entry.
+func NewEntry(body string) *Entry {
+	return &Entry{time.Now(), strings.TrimSpace(body) + "\n"}
+}
+
+// OpenEntry returns an existing Entry from a file.
+func OpenEntry(orig string) (*Entry, error) {
+	var eobj = new(Entry)
+	if err := ReadJSON(orig, eobj); err != nil {
+		return nil, err
+	}
+
+	return eobj, nil
+}
+
+// Dest returns the Entry's destination filepath in a directory.
+func (e *Entry) Dest(dire string) string {
+	base := fmt.Sprintf("%d.json", e.Time.Unix())
+	return filepath.Join(dire, base)
+}
+
+// Match returns true if the Entry's body contains a hashtag.
+func (e *Entry) Match(tags []string) bool {
+	for _, tag := range tags {
+		if strings.Contains(e.Body, tag) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// Write writes the Entry to a file in a directory.
+func (e *Entry) Write(dire string) error {
+	dest := e.Dest(dire)
+	return WriteJSON(dest, e)
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//                                      old code                                     //
+///////////////////////////////////////////////////////////////////////////////////////
 
 func try(err error) {
 	if err != nil {
@@ -53,23 +126,15 @@ func try(err error) {
 func main() {
 	dire := "."
 	temp := filepath.Join(dire, "sonte.txt")
+	try(os.WriteFile(temp, nil, 0666))
 
 	if len(os.Args) <= 1 {
-		edit := os.Getenv("EDITOR")
-		look, err := exec.LookPath(edit)
-
-		comm := exec.Command(look, temp)
-		comm.Stdin = os.Stdin
-		comm.Stdout = os.Stdout
-		comm.Stderr = os.Stderr
-		try(err)
-		try(comm.Run())
-
+		try(EditFile(temp))
 		bytes, err := os.ReadFile(temp)
 		try(err)
+
 		if len(bytes) != 0 {
-			note := &Note{time.Now(), string(bytes)}
-			saveNote(dire, note)
+			try(NewEntry(string(bytes)).Write(dire))
 		}
 
 	} else {
@@ -78,21 +143,17 @@ func main() {
 			tags = append(tags, "#"+strings.ToLower(arg))
 		}
 
-		paths, err := filepath.Glob(filepath.Join(dire, "*.json"))
+		origs, err := filepath.Glob(filepath.Join(dire, "*.json"))
 		try(err)
 
-	checknote:
-		for _, path := range paths {
-			note, err := loadNote(path)
+		for _, orig := range origs {
+			entry, err := OpenEntry(orig)
 			try(err)
 
-			for _, tag := range tags {
-				if strings.Contains(note.Body, tag) {
-					fmt.Println(note.Time)
-					fmt.Println(note.Body)
-					fmt.Println("-----")
-					continue checknote
-				}
+			if entry.Match(tags) {
+				fmt.Println(entry.Time)
+				fmt.Println(entry.Body)
+				fmt.Println("-----")
 			}
 		}
 	}
