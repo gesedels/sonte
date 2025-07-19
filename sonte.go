@@ -14,6 +14,25 @@ import (
 	"time"
 )
 
+/*
+
+project layout:
+	sonte/
+		comms/
+			# command functions / types
+		items/
+			book/book.go # entire json directory
+			conf/conf.go # single json config file
+			list/list.go # single json tag-to-note cache file
+			note/note.go # single json note file
+		tools/
+			clui/clui.go # cli interface funcs
+			file/file/go # filesystem i/o funcs
+			json/json.go # json parsing/rendering funcs
+			neat/neat.go # sanitisation functions
+			test/test.go # testing funcs
+*/
+
 ///////////////////////////////////////////////////////////////////////////////////////
 //                       part one · value conversion functions                       //
 ///////////////////////////////////////////////////////////////////////////////////////
