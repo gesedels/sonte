@@ -5,11 +5,14 @@
 package main
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
@@ -149,6 +152,56 @@ func RunCreate(db *sqlx.DB) error {
 	return nil
 }
 
+// RunList lists all notes containing a hashtag.
+func RunList(db *sqlx.DB, tag string) error {
+	// Sanitise hashtag.
+	tag = strings.ToLower(tag)
+	tag = strings.TrimLeft(tag, "#")
+
+	// Get tag ID.
+	var t_id int
+	err := db.Get(&t_id, "select id from Tags where name=?", tag)
+	if err != nil {
+		return err
+	}
+
+	// Get note IDs.
+	var n_ids []int
+	err = db.Select(&n_ids, "select note from NoteTags where tag=?", t_id)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return err
+	}
+
+	// Iterate through note IDs.
+	for _, n_id := range n_ids {
+		var init int64
+		var body string
+
+		// Get note init time.
+		err := db.Get(&init, "select init from Notes where id=?", n_id)
+		if err != nil {
+			return err
+		}
+
+		// Get note body string.
+		err = db.Get(&body, "select body from Notes where id=?", n_id)
+		if err != nil {
+			return err
+		}
+
+		// Format init time.
+		tnow := time.Unix(init, 0)
+		tfmt := tnow.Format(time.DateTime)
+
+		// Print note.
+		fmt.Printf("# %s\n", tfmt)
+		fmt.Println(strings.TrimSpace(body))
+		fmt.Println("- - - - -")
+	}
+
+	return nil
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 //                             part ??? · main functions                             //
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -181,8 +234,10 @@ func main() {
 		try(err)
 	}
 
-	// Execute RunCreate on no arguments.
+	// Execute command.
 	if len(os.Args) <= 1 {
 		try(RunCreate(db))
+	} else {
+		try(RunList(db, os.Args[1]))
 	}
 }
