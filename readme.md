@@ -31,10 +31,9 @@ Field  | Description
 ------ | -----------
 `body` | A whitespace-trimmed string of the note's contents.
 `hash` | A hexidecimal SHA256 hash of the note's contents.
-`tags` | A space-separated list of every hashtag in the note.
 `time` | A unix UTC integer of the note's creation time.
 
-Note names and hashtags are always lowercase alphanumeric with dashes, so trying to create `My_Note_123` will result in `my-note-123`. Hashtags in notes must include the octothorpe (e.g.: `#foo`), but in commands it's optional.
+Note names are always lowercase alphanumeric with dashes, so trying to create `My_Note_123` will result in `my-note-123`.
 
 ## Commands
 
