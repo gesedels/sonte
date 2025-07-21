@@ -7,7 +7,13 @@
 
 ## Installation
 
-*TODO: `go get` or download.*
+You can install Sonte using your Go tools...
+
+```
+go install github.com/gesedels/sonte@latest
+```
+
+or download the [latest release][lr] for your platform.
 
 ## Configuration
 
@@ -29,4 +35,5 @@ Please send all bug reports and feature requests to the [issue tracker][it], tha
 [li]: https://github.com/gesedels/sonte/blob/main/license.md
 [go]: https://go.dev/doc/go1.24
 [it]: https://github.com/gesedels/sonte/issues
+[lr]: https://github.com/gesedels/sonte/releases/latest
 [sm]: https://github.com/gesedels
