@@ -15,7 +15,7 @@
 
 ## File Structure
 
-*TODO: Plaintext files, JSON-style metadata.*
+*TODO: Plaintext files, dot-style metadata.*
 
 ## Commands
 
