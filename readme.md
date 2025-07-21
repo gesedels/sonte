@@ -17,17 +17,13 @@ or download the [latest release][lr] for your platform.
 
 ## Configuration
 
-Sonte stores all data in a single database file, placed in one of three locations depending on which environment variables you have set:
+Sonte stores all data in a single directory in one of three locations, depending on which environment variables you have set:
 
-Variable          | Location
------------------ | --------
-`SONTE_DIR`       | `$SONTE_DIR/sonte.db`
-`XDG_CONFIG_HOME` | `$XDG_CONFIG_HOME/sonte/sonte.db`
-`$HOME`           | `$HOME/.sonte`
+- If `$SONTE_DIR` is set, the directory is used exactly.
+- If `$XDG_CONFIG_HOME` is set, the `sonte` subdirectory is used.
+- Otherwise, `$HOME` is used with dotfiles (e.g.: `.sonte.db`).
 
-If you're using `SONTE_DIR`, set it to the absolute path of an existing directory.
-
-## Database Structure
+## Structure & Syntax
 
 Sonte's data is stored in a [Bolt][bb] database, where each note is accessed by name and has the following stored fields:
 
@@ -35,56 +31,24 @@ Field  | Description
 ------ | -----------
 `body` | A whitespace-trimmed string of the note's contents.
 `hash` | A hexidecimal SHA256 hash of the note's contents.
-`tags` | A space-separated list of all the hashtags in the note.
+`tags` | A space-separated list of every hashtag in the note.
 `time` | A unix UTC integer of the note's creation time.
+
+Note names and hashtags are always lowercase alphanumeric with dashes, so trying to create `My_Note_123` will result in `my-note-123`. Hashtags in notes must include the octothorpe (e.g.: `#foo`), but in commands it's optional.
 
 ## Commands
 
-### General Syntax
+### Write a note
 
-- Note names are always lowercase alphanumeric with dashes. Trying to create `My_Note_123` will result in `my-note-123`.
-- Hashtags are also always lowercase alphanumeric with dashes. Hashtags in notes must include the octothorpe (e.g.: `#foo`), but in commands it is optional.
+The `open` command will create the scratch file `sonte.temp`, open it in your default editor (according to `$EDITOR` or `$VISUAL`) and save the contents as the named note:
 
-### `find TEXT`
-
-List all notes in the database containing `TEXT` (case-insensitive).
-
-```text
-$ sonte find foo
-bands-i-like
-list-of-placeholders
+```fish
+$ export EDITOR=vim
+$ sonte open foo
 ```
 
-### `list [TEXT]`
-
-List all notes in the database with names containing `TEXT` (case-insensitive). If `TEXT` is blank, list all existing notes.
-
-```text
-$ sonte list
-bands-i-like
-list-of-placeholders
-third-things
-
-$ sonte list bands
-bands-i-like
-```
-
-### `open NOTE`
-
-Open `NOTE` in a temporary file your default terminal editor (according to `EDITOR` or `VISUAL`). When finished, the note is added to the database.
-
-```text
-$ sonte open new-note
-# opens in $EDITOR
-```
-
-### `read NOTE`
-
-Print the contents of `NOTE` to standard output. If the note does not exist, print nothing.
-
-### `tags NAME`
-
-List all notes containing hashtag `TAG`,
+- If the note exists it will be overwritten.
+- The scratch file is cleared before opening and left intact.
 
 ## Contributions
 
