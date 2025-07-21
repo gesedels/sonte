@@ -17,7 +17,15 @@ or download the [latest release][lr] for your platform.
 
 ## Configuration
 
-*TODO: Envvars $SONTE_DB, $XDG or $HOME table.*
+Sonte stores all data in a single database file, placed in one of three locations depending on which environment variables you have set:
+
+Variable          | Location
+----------------- | --------
+`SONTE_DIR`       | `$SONTE_DIR/sonte.db`
+`XDG_CONFIG_HOME` | `$XDG_CONFIG_HOME/sonte/sonte.db`
+`$HOME`           | `$HOME/.sonte`
+
+If you're using `SONTE_DIR`, set it to the absolute path of an existing directory.
 
 ## Database Structure
 
