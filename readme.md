@@ -38,7 +38,7 @@ Sonte has some opinionated formatting rules you need to know:
 - `SONTE_DIR` is always checked for existence before use.
 - `SONTE_EXT` is always lowercase and no other extensions are used.
 
-These rules are applied to arguments before processing, so if you have files that don't follow these rules Sonte cannot see them:
+These rules are applied before processing, so if you have files that don't follow these rules Sonte cannot see them:
 
 ```bash
 $ touch "$HOME/Notes/My Note.md"
@@ -58,6 +58,8 @@ $ sonte open foo
 ```
 
 - If the note does not exist, it is created and left empty.
+
+> **TODO:** More commands (`echo`, `find`, `list`, `make`, etc).
 
 ## Contributions
 
