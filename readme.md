@@ -1,6 +1,8 @@
 # Sonte
 
-**Sonte** (*Stephen's Obsessive Note-Taking Engine*) is a command-line note management system, written in [Go 1.24][go] by [Stephen Malone][sm]. If you have a directory full of plaintext note files you need to handle, Sonte can help you.
+**Sonte** (*Stephen's Obsessive Note-Taking Engine*) is a command-line note management system, written in [Go 1.24][go] by [Stephen Malone][sm]. It's designed to help you organise and manipulate a single directory full of plaintext note files from anywhere on the command line.
+
+> **TODO:** Demo block.
 
 - See [`changes.md`][ch] for the full changelog.
 - See [`license.md`][li] for the open-source license (BSD-3).
