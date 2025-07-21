@@ -11,15 +11,15 @@
 
 ## Configuration
 
-*TODO: Envvars $SONTE_DIR, $XDG or $HOME.*
+*TODO: Envvars $SONTE_DB, $XDG or $HOME table.*
 
-## File Structure
+## Database Structure
 
-*TODO: Plaintext files, dot-style metadata.*
+*TODO: Bolt DB, show fields table (time, body, hash, tags).*
 
 ## Commands
 
-*TODO: find [text], list [text=""], open [name], read [name], type [type].*
+*TODO: find [text], list [text=""], open [name] (or sonte [name] shortcut), read [name], tags [tags...].*
 
 ## Contributions
 
