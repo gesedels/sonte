@@ -29,7 +29,14 @@ If you're using `SONTE_DIR`, set it to the absolute path of an existing director
 
 ## Database Structure
 
-*TODO: Bolt DB, show fields table (time, body, hash, tags).*
+Sonte's data is stored in a [Bolt][bb] where each note has the following stored fields:
+
+Field  | Description 
+------ | -----------
+`body` | A whitespace-trimmed user text string.
+`hash` | A full SHA256 hash of `body`.
+`tags` | A space-separated list of all hashtags in `body`.
+`time` | A unix UTC integer of the note's creation time.
 
 ## Commands
 
@@ -39,6 +46,7 @@ If you're using `SONTE_DIR`, set it to the absolute path of an existing director
 
 Please send all bug reports and feature requests to the [issue tracker][it], thank you.
 
+[bb]: https://github.com/etcd-io/bbolt
 [ch]: https://github.com/gesedels/sonte/blob/main/changes.md
 [li]: https://github.com/gesedels/sonte/blob/main/license.md
 [go]: https://go.dev/doc/go1.24
