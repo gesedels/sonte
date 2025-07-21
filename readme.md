@@ -22,7 +22,7 @@ Sonte uses two environment variables for configuration:
 - `SONTE_DIR` is the directory your note files are in.
 - `SONTE_EXT` is the extension your note files use (including the dot).
 
-```fish
+```bash
 $ export SONTE_DIR = "$HOME/Notes"
 $ export SONTE_EXT = ".txt"
 ```
@@ -37,9 +37,9 @@ That's it! That's all you need to do.
 
 ### Open a note
 
-The `open` command will open a new or existing note in your default editor (according to `$EDITOR` or `$VISUAL`):
+The `open` command will open a new or existing note in your default editor (as per `$EDITOR` or `$VISUAL`):
 
-```fish
+```bash
 $ sonte open foo
 # Opens "$HOME/Notes/foo.txt" in $EDITOR.
 ```
