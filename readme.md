@@ -13,7 +13,7 @@ You can install Sonte using your Go tools...
 go install github.com/gesedels/sonte@latest
 ```
 
-or download the [latest release][lr] for your platform.
+...or download the [latest release][lr] for your platform.
 
 ## Configuration
 
@@ -40,15 +40,15 @@ Note names and hashtags are always lowercase alphanumeric with dashes, so trying
 
 ### Write a note
 
-The `open` command will create the scratch file `sonte.temp`, open it in your default editor (according to `$EDITOR` or `$VISUAL`) and save the contents as the named note:
+The `open` command will create the scratch file `sonte.temp` in the data directory, open it in your default editor (according to `$EDITOR` or `$VISUAL`) and save the contents as the named note:
 
-```fish
+```text
 $ export EDITOR=vim
 $ sonte open foo
 ```
 
 - If the note exists it will be overwritten.
-- The scratch file is cleared before opening and left intact.
+- The scratch file is cleared before opening and left intact after.
 
 ## Contributions
 
