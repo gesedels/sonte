@@ -29,15 +29,28 @@ $ export SONTE_EXT = ".txt"
 
 That's it! That's all you need to do.
 
+## Formatting 
+
+Sonte has some opinionated formatting rules you need to know:
+
+- Names are always lowercase alphanumeric with dashes.
+- Note contents are always whitespace-trimmed with a trailing newline.
+- `SONTE_DIR` is always checked for existence before use.
+- `SONTE_EXT` is always lowercase and no other extensions are used.
+
+These rules are applied to arguments before processing, so if you have files that don't follow these rules Sonte cannot see them:
+
+```bash
+$ touch "$HOME/Notes/My Note.md"
+$ sonte open "My Note"
+# Opens "my-note.txt", not "My Note.md".
+```
+
 ## Commands
-
-### Basic Syntax
-
-- Note names are always lowercase alphanumeric with dashes, so trying to create `My_Note_123` will result in `my-note-123`.
 
 ### Open a note
 
-The `open` command will open a new or existing note in your default editor (as per `$EDITOR` or `$VISUAL`):
+The `open` command opens a new or existing note in your default editor (as per `$EDITOR` or `$VISUAL`):
 
 ```bash
 $ sonte open foo
