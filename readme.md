@@ -19,7 +19,7 @@
 
 ## Commands
 
-*TODO: find [text], list [text=""], open [name], read [name], tags [tags...].*
+*TODO: find [text], list [text=""], open [name], read [name], type [type].*
 
 ## Contributions
 

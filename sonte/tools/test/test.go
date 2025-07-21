@@ -11,7 +11,7 @@ import (
 
 // MockNotes is a base:body map of mock notes for unit testing.
 var MockNotes = map[string]string{
-	"alpha.extn":    ".date 2001-02-03\n.tags foo bar\nAlpha note.\n",
+	"alpha.extn":    ".date 2001-02-03\n.type test\nAlpha note.\n",
 	"bravo.extn":    "Bravo note.\n",
 	"charlie.trash": "Charlie note (trash).\n",
 }
