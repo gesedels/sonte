@@ -1,6 +1,6 @@
 # Sonte
 
-**Sonte** (*Stephen's Obsessive Note-Taking Engine*) is a command-line plaintext note management suite, written in [Go 1.24][go] by [Stephen Malone][sm].
+**Sonte** (*Stephen's Obsessive Note-Taking Engine*) is a command-line note management system, written in [Go 1.24][go] by [Stephen Malone][sm]. If you have a directory full of plaintext note files you need to handle, Sonte can help you.
 
 - See [`changes.md`][ch] for the full changelog.
 - See [`license.md`][li] for the open-source license (BSD-3).
@@ -17,43 +17,39 @@ go install github.com/gesedels/sonte@latest
 
 ## Configuration
 
-Sonte stores all data in a single directory in one of three locations, depending on which environment variables you have set:
+Sonte uses two environment variables for configuration:
 
-- If `$SONTE_DIR` is set, the directory is used exactly.
-- If `$XDG_CONFIG_HOME` is set, the `sonte` subdirectory is used.
-- Otherwise, `$HOME` is used with dotfiles (e.g.: `.sonte.db`).
+- `SONTE_DIR` is the directory your note files are in.
+- `SONTE_EXT` is the extension your note files use (including the dot).
 
-## Structure & Syntax
+```fish
+$ export SONTE_DIR = "$HOME/Notes"
+$ export SONTE_EXT = ".txt"
+```
 
-Sonte's data is stored in a [Bolt][bb] database, where each note is accessed by name and has the following stored fields:
-
-Field  | Description
------- | -----------
-`body` | A whitespace-trimmed string of the note's contents.
-`hash` | A hexidecimal SHA256 hash of the note's contents.
-`time` | A unix UTC integer of the note's creation time.
-
-Note names are always lowercase alphanumeric with dashes, so trying to create `My_Note_123` will result in `my-note-123`.
+That's it! That's all you need to do.
 
 ## Commands
 
-### Write a note
+### Basic Syntax
 
-The `open` command will create the scratch file `sonte.temp` in the data directory, open it in your default editor (according to `$EDITOR` or `$VISUAL`) and save the contents as the named note:
+- Note names are always lowercase alphanumeric with dashes, so trying to create `My_Note_123` will result in `my-note-123`.
 
-```text
-$ export EDITOR=vim
+### Open a note
+
+The `open` command will open a new or existing note in your default editor (according to `$EDITOR` or `$VISUAL`):
+
+```fish
 $ sonte open foo
+# Opens "$HOME/Notes/foo.txt" in $EDITOR.
 ```
 
-- If the note exists it will be overwritten.
-- The scratch file is cleared before opening and left intact after.
+- If the note does not exist, it is created and left empty.
 
 ## Contributions
 
 Please send all bug reports and feature requests to the [issue tracker][it], thank you.
 
-[bb]: https://github.com/etcd-io/bbolt
 [ch]: https://github.com/gesedels/sonte/blob/main/changes.md
 [li]: https://github.com/gesedels/sonte/blob/main/license.md
 [go]: https://go.dev/doc/go1.24
