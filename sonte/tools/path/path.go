@@ -38,9 +38,10 @@ func Join(dire, name, extn string) string {
 	return filepath.Join(dire, name+extn)
 }
 
-// Match returns true if a file path's name contains a substring.
+// Match returns true if a file path's name contains a case-insensitive substring.
 func Match(orig, text string) bool {
 	name := Name(orig)
+	text = strings.ToLower(text)
 	return strings.Contains(name, text)
 }
 

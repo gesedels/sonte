@@ -63,6 +63,27 @@ func TestRead(t *testing.T) {
 	assert.EqualError(t, err, `cannot read file "nope.txt" - does not exist`)
 }
 
+func TestSearch(t *testing.T) {
+	// setup
+	orig := test.MockFile(t, "alpha.extn")
+	nope := "/dire/nope.txt"
+
+	// success - true
+	ok, err := Search(orig, "ALPH")
+	assert.True(t, ok)
+	assert.NoError(t, err)
+
+	// success - false
+	ok, err = Search(orig, "nope")
+	assert.False(t, ok)
+	assert.NoError(t, err)
+
+	// error - does not exist
+	ok, err = Search(nope, "nope")
+	assert.False(t, ok)
+	assert.EqualError(t, err, `cannot search file "nope.txt" - does not exist`)
+}
+
 func TestUpdate(t *testing.T) {
 	// setup
 	orig := test.MockFile(t, "alpha.extn")

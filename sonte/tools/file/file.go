@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 )
 
 // Create creates a new file containing a string.
@@ -55,6 +56,24 @@ func Read(orig string) (string, error) {
 	}
 
 	return string(bytes), nil
+}
+
+// Search returns true if a file's body contains a case-insensitive substring.
+func Search(orig, text string) (bool, error) {
+	if !Exists(orig) {
+		base := path.Base(orig)
+		return false, fmt.Errorf("cannot search file %q - does not exist", base)
+	}
+
+	bytes, err := os.ReadFile(orig)
+	if err != nil {
+		base := path.Base(orig)
+		return false, fmt.Errorf("cannot search file %q - %w", base, err)
+	}
+
+	text = strings.ToLower(text)
+	body := strings.ToLower(string(bytes))
+	return strings.Contains(body, text), nil
 }
 
 // Update overwrites an existing file with a string.
