@@ -63,6 +63,25 @@ func Read(orig string) (string, error) {
 	return string(bytes), nil
 }
 
+// Rename changes a file's path to a different name.
+func Rename(orig, name string) error {
+	if !Exists(orig) {
+		base := path.Base(orig)
+		return fmt.Errorf("cannot rename file %q - does not exist", base)
+	}
+
+	dire := path.Dire(orig)
+	extn := path.Extn(orig)
+	dest := path.Join(dire, name, extn)
+
+	if err := os.Rename(orig, dest); err != nil {
+		base := path.Base(orig)
+		return fmt.Errorf("cannot rename file %q - %w", base, err)
+	}
+
+	return nil
+}
+
 // Search returns true if a file's body contains a case-insensitive substring.
 func Search(orig, text string) (bool, error) {
 	if !Exists(orig) {

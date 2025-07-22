@@ -66,6 +66,23 @@ func TestRead(t *testing.T) {
 	assert.EqualError(t, err, `cannot read file "nope.txt" - does not exist`)
 }
 
+func TestRename(t *testing.T) {
+	// setup
+	orig := test.MockFile(t, "alpha.extn")
+	dest := strings.Replace(orig, "alpha", "rename", 1)
+	nope := "/dire/nope.txt"
+
+	// success
+	err := Rename(orig, "rename")
+	assert.NoFileExists(t, orig)
+	assert.FileExists(t, dest)
+	assert.NoError(t, err)
+
+	// error - does not exist
+	err = Rename(nope, "nope")
+	assert.EqualError(t, err, `cannot rename file "nope.txt" - does not exist`)
+}
+
 func TestSearch(t *testing.T) {
 	// setup
 	orig := test.MockFile(t, "alpha.extn")
