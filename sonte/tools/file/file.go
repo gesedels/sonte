@@ -5,8 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path"
 	"strings"
+
+	"github.com/gesedels/sonte/sonte/tools/path"
 )
 
 // Create creates a new file containing a string.
@@ -24,10 +25,14 @@ func Create(dest, body string, mode os.FileMode) error {
 	return nil
 }
 
-// Delete deletes an existing file.
+// Delete "deletes" an existing file by changing its extension to ".trash".
 func Delete(orig string) error {
 	if Exists(orig) {
-		if err := os.Remove(orig); err != nil {
+		dire := path.Dire(orig)
+		name := path.Name(orig)
+		dest := path.Join(dire, name, ".trash")
+
+		if err := os.Rename(orig, dest); err != nil {
 			base := path.Base(orig)
 			return fmt.Errorf("cannot delete file %q - %w", base, err)
 		}

@@ -2,6 +2,7 @@ package file
 
 import (
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/gesedels/sonte/sonte/tools/test"
@@ -26,10 +27,12 @@ func TestCreate(t *testing.T) {
 func TestDelete(t *testing.T) {
 	// setup
 	orig := test.MockFile(t, "alpha.extn")
+	dest := strings.Replace(orig, ".extn", ".trash", 1)
 
 	// success
 	err := Delete(orig)
 	assert.NoFileExists(t, orig)
+	assert.FileExists(t, dest)
 	assert.NoError(t, err)
 }
 
