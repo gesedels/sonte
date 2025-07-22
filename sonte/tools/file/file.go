@@ -63,7 +63,7 @@ func Read(orig string) (string, error) {
 	return string(bytes), nil
 }
 
-// Rename changes a file's path to a different name.
+// Rename moves a file to a different name.
 func Rename(orig, name string) error {
 	if !Exists(orig) {
 		base := path.Base(orig)
@@ -100,7 +100,7 @@ func Search(orig, text string) (bool, error) {
 	return strings.Contains(body, text), nil
 }
 
-// Update overwrites an existing file with a string.
+// Update overwrites an existing file's body with a string.
 func Update(orig, body string, mode os.FileMode) error {
 	if !Exists(orig) {
 		base := path.Base(orig)

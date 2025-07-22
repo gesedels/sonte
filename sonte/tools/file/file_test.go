@@ -12,7 +12,7 @@ import (
 func TestCreate(t *testing.T) {
 	// setup
 	dire := test.MockDire(t)
-	dest := filepath.Join(dire, "create.extn")
+	dest := filepath.Join(dire, "name.extn")
 
 	// success
 	err := Create(dest, "Body.\n", 0666)
@@ -21,7 +21,7 @@ func TestCreate(t *testing.T) {
 
 	// error - already exists
 	err = Create(dest, "Body.\n", 0666)
-	assert.EqualError(t, err, `cannot create file "create.extn" - already exists`)
+	assert.EqualError(t, err, `cannot create file "name.extn" - already exists`)
 }
 
 func TestDelete(t *testing.T) {
@@ -69,11 +69,11 @@ func TestRead(t *testing.T) {
 func TestRename(t *testing.T) {
 	// setup
 	orig := test.MockFile(t, "alpha.extn")
-	dest := strings.Replace(orig, "alpha", "rename", 1)
+	dest := strings.Replace(orig, "alpha", "name", 1)
 	nope := "/dire/nope.txt"
 
 	// success
-	err := Rename(orig, "rename")
+	err := Rename(orig, "name")
 	assert.NoFileExists(t, orig)
 	assert.FileExists(t, dest)
 	assert.NoError(t, err)
