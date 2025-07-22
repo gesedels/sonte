@@ -31,7 +31,7 @@ $ export SONTE_EXT = ".txt"
 
 That's it! That's all you need to do.
 
-## Formatting 
+## Formatting
 
 Sonte has some opinionated formatting rules you need to know:
 
@@ -52,7 +52,7 @@ $ sonte open "My Note"
 
 ### Open a note
 
-The `open` command opens a new or existing note in your default editor (as per `$EDITOR` or `$VISUAL`):
+The `open` command opens a new or existing note in your default editor (according to `$EDITOR`):
 
 ```bash
 $ sonte open foo

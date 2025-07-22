@@ -8,17 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestExec(t *testing.T) {
-	// setup
-	dire := t.TempDir()
-	dest := filepath.Join(dire, "exec.extn")
-
-	// success
-	err := Exec("touch", dest)
-	assert.FileExists(t, dest)
-	assert.NoError(t, err)
-}
-
 func TestEnv(t *testing.T) {
 	// setup
 	os.Setenv("NAME", "\tdata\n")
@@ -40,18 +29,13 @@ func TestEnv(t *testing.T) {
 	assert.EqualError(t, err, `environment variable "EMPTY" is empty`)
 }
 
-func TestEnvs(t *testing.T) {
+func TestExec(t *testing.T) {
 	// setup
-	os.Setenv("NAME", "\tdata\n")
-	os.Setenv("EMPTY", "\n")
+	dire := t.TempDir()
+	dest := filepath.Join(dire, "exec.extn")
 
 	// success
-	data, err := Envs("NOPE", "EMPTY", "NAME")
-	assert.Equal(t, "data", data)
+	err := Exec("touch", dest)
+	assert.FileExists(t, dest)
 	assert.NoError(t, err)
-
-	// error - variables not set or empty
-	data, err = Envs("NOPE", "EMPTY")
-	assert.Empty(t, data)
-	assert.EqualError(t, err, `environment variables "NOPE", "EMPTY" are not set or empty`)
 }
