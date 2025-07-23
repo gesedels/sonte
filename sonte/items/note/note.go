@@ -30,7 +30,7 @@ func (n *Note) Exists() bool {
 	return file.Exists(n.Orig)
 }
 
-// Match returns true if the Note's name contains a case-insensitive substring.
+// Match returns true if the Note's name contains a substring.
 func (n *Note) Match(text string) bool {
 	return path.Match(n.Orig, text)
 }
@@ -53,7 +53,7 @@ func (n *Note) Rename(name string) error {
 	return file.Rename(n.Orig, name)
 }
 
-// Search returns true if the Note's body contains a case-insensitive substring.
+// Search returns true if the Note's body contains a substring.
 func (n *Note) Search(text string) (bool, error) {
 	return file.Search(n.Orig, text)
 }

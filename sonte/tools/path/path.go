@@ -3,6 +3,7 @@ package path
 
 import (
 	"path/filepath"
+	"slices"
 	"strings"
 )
 
@@ -26,10 +27,11 @@ func Extn(orig string) string {
 	return ""
 }
 
-// Glob returns all file paths in a directory matching an extension.
+// Glob returns all file paths in a directory matching an extension in alphabetical order.
 func Glob(dire, extn string) []string {
 	glob := filepath.Join(dire, "*"+extn)
 	origs, _ := filepath.Glob(glob)
+	slices.Sort(origs)
 	return origs
 }
 
@@ -38,7 +40,7 @@ func Join(dire, name, extn string) string {
 	return filepath.Join(dire, name+extn)
 }
 
-// Match returns true if a file path's name contains a case-insensitive substring.
+// Match returns true if a file path's name contains a substring.
 func Match(orig, text string) bool {
 	name := Name(orig)
 	name = strings.ToLower(name)

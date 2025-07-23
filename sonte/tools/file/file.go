@@ -82,7 +82,7 @@ func Rename(orig, name string) error {
 	return nil
 }
 
-// Search returns true if a file's body contains a case-insensitive substring.
+// Search returns true if a file's body contains a substring.
 func Search(orig, text string) (bool, error) {
 	if !Exists(orig) {
 		base := path.Base(orig)
