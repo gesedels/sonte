@@ -1,4 +1,4 @@
-// Package comms implements the Command type and functions.
+// Package comms implements user-facing command functions.
 package comms
 
 import (
@@ -9,12 +9,12 @@ import (
 	"github.com/gesedels/sonte/sonte/tools/neat"
 )
 
-// Command is a user-facing command-line operation.
+// Command is a user-facing callable function.
 type Command func(io.Writer, *book.Book, []string) error
 
 // Commands is a map of all existing Commands.
 var Commands = map[string]Command{
-	// "open": CommandOpen,
+	// "open": OpenCommand,
 }
 
 // Run discovers and executes a Command with arguments.

@@ -10,17 +10,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func mockCommand(w io.Writer, _ *book.Book, elems []string) error {
+	fmt.Fprintf(w, "%v\n", elems)
+	return nil
+}
+
 func TestRun(t *testing.T) {
 	// setup
 	w := bytes.NewBuffer(nil)
-	Commands["test"] = func(w io.Writer, _ *book.Book, elems []string) error {
-		fmt.Fprintf(w, "elems=%v\n", elems)
-		return nil
-	}
+	Commands["test"] = mockCommand
 
 	// success
 	err := Run(w, nil, []string{"test", "alpha"})
-	assert.Equal(t, "elems=[alpha]\n", w.String())
+	assert.Equal(t, "[alpha]\n", w.String())
 	assert.NoError(t, err)
 
 	// error - no command provided
