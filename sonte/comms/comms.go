@@ -2,32 +2,35 @@
 package comms
 
 import (
+	"flag"
 	"fmt"
 	"io"
 
 	"github.com/gesedels/sonte/sonte/items/book"
-	"github.com/gesedels/sonte/sonte/tools/neat"
 )
 
-// Command is a user-facing callable function.
-type Command func(io.Writer, *book.Book, []string) error
-
-// Commands is a map of all existing Commands.
-var Commands = map[string]Command{
-	// "open": OpenCommand,
+// usage prints a FlagSet's default usage and returns a nil error.
+func usage(w io.Writer, fset *flag.FlagSet) error {
+	fmt.Fprintf(w, "Usage of %s:\n", fset.Name())
+	fset.SetOutput(w)
+	fset.PrintDefaults()
+	return nil
 }
 
-// Run discovers and executes a Command with arguments.
+// Run parsed and executes command-line arguments.
 func Run(w io.Writer, book *book.Book, elems []string) error {
-	if len(elems) == 0 {
-		return fmt.Errorf("cannot run command - none provided")
-	}
+	fset := flag.NewFlagSet("sonte", flag.ExitOnError)
+	help := fset.Bool("h", false, "show help")
+	fset.Parse(elems)
 
-	name := neat.Name(elems[0])
-	cfun, ok := Commands[name]
-	if !ok {
-		return fmt.Errorf("cannot run command %q - does not exist", name)
-	}
+	switch {
+	case *help:
+		return usage(w, fset)
 
-	return cfun(w, book, elems[1:])
+	case fset.NArg() != 0:
+		return CommandOpen(w, book, flag.Arg(0))
+
+	default:
+		return usage(w, fset)
+	}
 }

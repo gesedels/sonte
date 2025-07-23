@@ -2,34 +2,28 @@ package comms
 
 import (
 	"bytes"
-	"fmt"
-	"io"
+	"flag"
 	"testing"
 
 	"github.com/gesedels/sonte/sonte/items/book"
+	"github.com/gesedels/sonte/sonte/tools/test"
 	"github.com/stretchr/testify/assert"
 )
 
-func mockCommand(w io.Writer, _ *book.Book, elems []string) error {
-	fmt.Fprintf(w, "%v\n", elems)
-	return nil
+func mockWriterBook(t *testing.T) (*bytes.Buffer, *book.Book) {
+	dire := test.MockDire(t)
+	book := book.New(dire, ".extn", 0666)
+	return bytes.NewBuffer(nil), book
 }
 
-func TestRun(t *testing.T) {
+func TestUsage(t *testing.T) {
 	// setup
 	w := bytes.NewBuffer(nil)
-	Commands["test"] = mockCommand
+	fset := flag.NewFlagSet("test", flag.ExitOnError)
+	fset.Bool("t", false, "test flag")
 
 	// success
-	err := Run(w, nil, []string{"test", "alpha"})
-	assert.Equal(t, "[alpha]\n", w.String())
+	err := usage(w, fset)
+	assert.Equal(t, "Usage of test:\n  -t\ttest flag\n", w.String())
 	assert.NoError(t, err)
-
-	// error - no command provided
-	err = Run(nil, nil, nil)
-	assert.EqualError(t, err, `cannot run command - none provided`)
-
-	// error - command does not exist
-	err = Run(nil, nil, []string{"nope"})
-	assert.EqualError(t, err, `cannot run command "nope" - does not exist`)
 }

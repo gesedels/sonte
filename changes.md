@@ -1,7 +1,8 @@
 # Changes
 
 ## [Unreleased]
-- Nothing yet.
+### Added
+- New command: `open`.
 
 ## [v0.0.0] - 2025-07-22
 ### Added
