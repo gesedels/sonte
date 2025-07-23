@@ -46,6 +46,15 @@ func TestCreate(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestExists(t *testing.T) {
+	// setup
+	book := mockBook(t)
+
+	// success
+	ok := book.Exists()
+	assert.True(t, ok)
+}
+
 func TestFilter(t *testing.T) {
 	// setup
 	book := mockBook(t)

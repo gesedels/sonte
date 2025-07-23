@@ -53,6 +53,11 @@ func (b *Book) Create(name, body string) (*note.Note, error) {
 	return note.New(dest, b.Mode), nil
 }
 
+// Exists returns true if the Book's directory exists.
+func (b *Book) Exists() bool {
+	return file.Exists(b.Dire)
+}
+
 // Filter returns all existing Notes in the Book that succeed a filter function.
 func (b *Book) Filter(ffun func(*note.Note) (bool, error)) ([]*note.Note, error) {
 	var notes []*note.Note
