@@ -3,23 +3,21 @@ package file
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"strings"
 
+	"github.com/gesedels/sonte/sonte/tools/errs"
 	"github.com/gesedels/sonte/sonte/tools/path"
 )
 
 // Create creates a new file containing a string.
 func Create(dest, body string, mode os.FileMode) error {
 	if Exists(dest) {
-		base := path.Base(dest)
-		return fmt.Errorf("cannot create file %q - already exists", base)
+		return errs.FileAlreadyExists(dest)
 	}
 
 	if err := os.WriteFile(dest, []byte(body), mode); err != nil {
-		base := path.Base(dest)
-		return fmt.Errorf("cannot create file %q - %w", base, err)
+		return errs.FileSystemError(dest, err)
 	}
 
 	return nil
@@ -33,8 +31,7 @@ func Delete(orig string) error {
 		dest := path.Join(dire, name, ".trash")
 
 		if err := os.Rename(orig, dest); err != nil {
-			base := path.Base(orig)
-			return fmt.Errorf("cannot delete file %q - %w", base, err)
+			return errs.FileSystemError(orig, err)
 		}
 	}
 
@@ -50,14 +47,12 @@ func Exists(orig string) bool {
 // Read returns a file's body as a string.
 func Read(orig string) (string, error) {
 	if !Exists(orig) {
-		base := path.Base(orig)
-		return "", fmt.Errorf("cannot read file %q - does not exist", base)
+		return "", errs.FileDoesNotExist(orig)
 	}
 
 	bytes, err := os.ReadFile(orig)
 	if err != nil {
-		base := path.Base(orig)
-		return "", fmt.Errorf("cannot read file %q - %w", base, err)
+		return "", errs.FileSystemError(orig, err)
 	}
 
 	return string(bytes), nil
@@ -66,8 +61,7 @@ func Read(orig string) (string, error) {
 // Rename moves a file to a different name.
 func Rename(orig, name string) error {
 	if !Exists(orig) {
-		base := path.Base(orig)
-		return fmt.Errorf("cannot rename file %q - does not exist", base)
+		return errs.FileDoesNotExist(orig)
 	}
 
 	dire := path.Dire(orig)
@@ -75,8 +69,7 @@ func Rename(orig, name string) error {
 	dest := path.Join(dire, name, extn)
 
 	if err := os.Rename(orig, dest); err != nil {
-		base := path.Base(orig)
-		return fmt.Errorf("cannot rename file %q - %w", base, err)
+		return errs.FileSystemError(orig, err)
 	}
 
 	return nil
@@ -85,14 +78,12 @@ func Rename(orig, name string) error {
 // Search returns true if a file's body contains a substring.
 func Search(orig, text string) (bool, error) {
 	if !Exists(orig) {
-		base := path.Base(orig)
-		return false, fmt.Errorf("cannot search file %q - does not exist", base)
+		return false, errs.FileDoesNotExist(orig)
 	}
 
 	bytes, err := os.ReadFile(orig)
 	if err != nil {
-		base := path.Base(orig)
-		return false, fmt.Errorf("cannot search file %q - %w", base, err)
+		return false, errs.FileSystemError(orig, err)
 	}
 
 	text = strings.ToLower(text)
@@ -103,13 +94,11 @@ func Search(orig, text string) (bool, error) {
 // Update overwrites an existing file's body with a string.
 func Update(orig, body string, mode os.FileMode) error {
 	if !Exists(orig) {
-		base := path.Base(orig)
-		return fmt.Errorf("cannot update file %q - does not exist", base)
+		return errs.FileDoesNotExist(orig)
 	}
 
 	if err := os.WriteFile(orig, []byte(body), mode); err != nil {
-		base := path.Base(orig)
-		return fmt.Errorf("cannot update file %q - %w", base, err)
+		return errs.FileSystemError(orig, err)
 	}
 
 	return nil

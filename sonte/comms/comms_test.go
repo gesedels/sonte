@@ -24,5 +24,5 @@ func TestWriteUsage(t *testing.T) {
 
 	// success
 	WriteUsage(w, fset)
-	assert.NotEmpty(t, "", w.String())
+	assert.NotEmpty(t, w.String())
 }

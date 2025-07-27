@@ -82,7 +82,7 @@ func TestGet(t *testing.T) {
 	// error - does not exist
 	note, err = book.Get("nope")
 	assert.Nil(t, note)
-	assert.EqualError(t, err, `cannot locate file "nope.extn" - does not exist`)
+	assert.EqualError(t, err, `file "nope.extn" does not exist`)
 }
 
 func TestGetOrCreate(t *testing.T) {

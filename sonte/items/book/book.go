@@ -2,11 +2,11 @@
 package book
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gesedels/sonte/sonte/items/note"
 	"github.com/gesedels/sonte/sonte/tools/clui"
+	"github.com/gesedels/sonte/sonte/tools/errs"
 	"github.com/gesedels/sonte/sonte/tools/file"
 	"github.com/gesedels/sonte/sonte/tools/neat"
 	"github.com/gesedels/sonte/sonte/tools/path"
@@ -81,8 +81,7 @@ func (b *Book) Get(name string) (*note.Note, error) {
 	orig := path.Join(b.Dire, name, b.Extn)
 
 	if !file.Exists(orig) {
-		base := path.Base(orig)
-		return nil, fmt.Errorf("cannot locate file %q - does not exist", base)
+		return nil, errs.FileDoesNotExist(orig)
 	}
 
 	return note.New(orig, b.Mode), nil

@@ -11,22 +11,16 @@ import (
 func TestEnv(t *testing.T) {
 	// setup
 	os.Setenv("NAME", "\tdata\n")
-	os.Setenv("EMPTY", "\n")
 
 	// success
 	data, err := Env("NAME")
 	assert.Equal(t, "data", data)
 	assert.NoError(t, err)
 
-	// error - variable is not set
+	// error - variable does not exist
 	data, err = Env("NOPE")
 	assert.Empty(t, data)
-	assert.EqualError(t, err, `environment variable "NOPE" is not set`)
-
-	// error - variable is empty
-	data, err = Env("EMPTY")
-	assert.Empty(t, data)
-	assert.EqualError(t, err, `environment variable "EMPTY" is empty`)
+	assert.EqualError(t, err, `environment variable "NOPE" does not exist`)
 }
 
 func TestExec(t *testing.T) {
