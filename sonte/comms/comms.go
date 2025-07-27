@@ -2,20 +2,23 @@
 package comms
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/gesedels/sonte/sonte/items/book"
 )
 
-// usage prints a FlagSet's default usage and returns a nil error.
-func usage(w io.Writer, fset *flag.FlagSet) error {
-	fmt.Fprintf(w, "Usage of %s:\n", fset.Name())
-	fset.SetOutput(w)
-	fset.PrintDefaults()
-	return nil
-}
+// Usage is the default program help message.
+const Usage = `
+Sonte: Stephen's Obsessive Note-Taking Engine.
+
+Command-line flags:
+%s
+See github.com/gesedels/sonte for more information.
+`
 
 // Run parsed and executes command-line arguments.
 func Run(w io.Writer, book *book.Book, elems []string) error {
@@ -25,12 +28,22 @@ func Run(w io.Writer, book *book.Book, elems []string) error {
 
 	switch {
 	case *help:
-		return usage(w, fset)
+		WriteUsage(w, fset)
+		return nil
 
 	case fset.NArg() != 0:
 		return CommandOpen(w, book, flag.Arg(0))
 
 	default:
-		return usage(w, fset)
+		WriteUsage(w, fset)
+		return nil
 	}
+}
+
+// WriteUsage writes a formatted usage string to a Writer.
+func WriteUsage(w io.Writer, fset *flag.FlagSet) {
+	b := bytes.NewBuffer(nil)
+	fset.SetOutput(b)
+	fset.PrintDefaults()
+	fmt.Fprintf(w, strings.TrimLeft(Usage, "\n"), b.String())
 }

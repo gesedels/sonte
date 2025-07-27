@@ -28,11 +28,12 @@ func Extn(extn string) string {
 // Name returns an lowercase alphanumeric-with-dashes file name string.
 func Name(name string) string {
 	var chars []rune
+
 	for _, char := range strings.ToLower(name) {
 		switch {
 		case unicode.IsLetter(char) || unicode.IsNumber(char):
 			chars = append(chars, char)
-		case unicode.IsSpace(char) || char == '_' || char == '.':
+		case unicode.IsSpace(char) || char == '_' || char == '-':
 			chars = append(chars, '-')
 		}
 	}

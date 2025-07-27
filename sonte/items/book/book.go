@@ -61,6 +61,7 @@ func (b *Book) Exists() bool {
 // Filter returns all existing Notes in the Book that succeed a filter function.
 func (b *Book) Filter(ffun func(*note.Note) (bool, error)) ([]*note.Note, error) {
 	var notes []*note.Note
+
 	for _, note := range b.List() {
 		ok, err := ffun(note)
 		switch {
@@ -78,6 +79,7 @@ func (b *Book) Filter(ffun func(*note.Note) (bool, error)) ([]*note.Note, error)
 func (b *Book) Get(name string) (*note.Note, error) {
 	name = neat.Name(name)
 	orig := path.Join(b.Dire, name, b.Extn)
+
 	if !file.Exists(orig) {
 		base := path.Base(orig)
 		return nil, fmt.Errorf("cannot locate file %q - does not exist", base)
@@ -91,6 +93,7 @@ func (b *Book) GetOrCreate(name, body string) (*note.Note, error) {
 	name = neat.Name(name)
 	body = neat.Body(body)
 	orig := path.Join(b.Dire, name, b.Extn)
+
 	if !file.Exists(orig) {
 		if err := file.Create(orig, body, b.Mode); err != nil {
 			return nil, err
@@ -103,6 +106,7 @@ func (b *Book) GetOrCreate(name, body string) (*note.Note, error) {
 // List returns all existing Notes in the Book in alphabetical order.
 func (b *Book) List() []*note.Note {
 	var notes []*note.Note
+
 	for _, orig := range path.Glob(b.Dire, b.Extn) {
 		notes = append(notes, note.New(orig, b.Mode))
 	}

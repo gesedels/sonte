@@ -30,6 +30,6 @@ func TextExtn(t *testing.T) {
 
 func TestName(t *testing.T) {
 	// success
-	name := Name("\tNAME_123!!!\n")
-	assert.Equal(t, "name-123", name)
+	name := Name("\tNAME-_1!2!3!\n")
+	assert.Equal(t, "name--123", name)
 }
