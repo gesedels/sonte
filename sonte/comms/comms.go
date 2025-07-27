@@ -42,8 +42,8 @@ func Run(w io.Writer, book *book.Book, elems []string) error {
 
 // WriteUsage writes a formatted usage string to a Writer.
 func WriteUsage(w io.Writer, fset *flag.FlagSet) {
-	b := bytes.NewBuffer(nil)
-	fset.SetOutput(b)
+	buff := bytes.NewBuffer(nil)
+	fset.SetOutput(buff)
 	fset.PrintDefaults()
-	fmt.Fprintf(w, strings.TrimLeft(Usage, "\n"), b.String())
+	fmt.Fprintf(w, strings.TrimLeft(Usage, "\n"), buff.String())
 }

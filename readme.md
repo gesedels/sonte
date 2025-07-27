@@ -44,7 +44,7 @@ These rules are applied before processing, so if you have files that don't follo
 
 ```bash
 $ touch "$HOME/Notes/My Note.md"
-$ sonte open "My Note"
+$ sonte "My Note"
 # Opens "my-note.txt", not "My Note.md".
 ```
 
@@ -52,16 +52,14 @@ $ sonte open "My Note"
 
 ### Open a note
 
-The `open` command opens a new or existing note in your default editor (according to `$EDITOR`):
+Run `sonte <note>` to open a note in your default editor (as specified by `$EDITOR`):
 
 ```bash
-$ sonte open foo
+$ sonte foo
 # Opens "$HOME/Notes/foo.txt" in $EDITOR.
 ```
 
 - If the note does not exist, it is created and left empty.
-
-> **TODO:** More commands (`echo`, `find`, `list`, `make`, etc).
 
 ## Contributions
 
